@@ -1,23 +1,29 @@
-import sys
+from flask import Flask, request, jsonify
 from web3 import Web3
 
-def check_infura_connection(infura_project_id):
+app = Flask(__name__)
+
+@app.route('/connect', methods=['POST'])
+def connect_to_infura():
     try:
+        # Parse the JSON body to get the Infura project ID
+        data = request.get_json()
+        if not data or 'infura_project_id' not in data:
+            return jsonify({"error": "Missing 'infura_project_id' in request body"}), 400
+
+        infura_project_id = data['infura_project_id']
+
         # Connect to the Ethereum node via Infura
         web3 = Web3(Web3.HTTPProvider(f"https://sepolia.infura.io/v3/{infura_project_id}"))
-        
+
         # Check if the connection to the node was successful
         if web3.is_connected():
-            print("Successfully connected to Infura.")
+            return jsonify({"message": "Successfully connected to Infura."}), 200
         else:
-            print("Failed to connect to Infura.")
+            return jsonify({"error": "Failed to connect to Infura."}), 500
 
     except Exception as e:
-        print(f"Error: {e}")
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Usage: python script1.py <infura_project_id>")
-    else:
-        infura_project_id = sys.argv[1]
-        check_infura_connection(infura_project_id)
+    app.run(debug=True, host="0.0.0.0")
