@@ -1,0 +1,8 @@
+Flask==2.0.1
+fastapi==0.75.1
+uvicorn==0.17.6
+Werkzeug==2.0.1
+web3==6.0.0
+requests==2.31.0
+eth-account==0.8.0
+gunicorn==20.0.4
