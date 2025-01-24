@@ -42,8 +42,8 @@ def create_and_send_wallet():
         account = web3.eth.account.create()
 
         # Check if account is created successfully
-        if account and account.address and account.private_key:
-            return jsonify({"sender_address": account.address, "sender_private_key": account.private_key.hex()}), 200
+        if account and account.address and account._private_key:
+            return jsonify({"sender_address": account.address, "sender_private_key": account._private_key.hex()}), 200
         else:
             return jsonify({"error": "Failed to generate wallet credentials"}), 500
             
