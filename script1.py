@@ -47,6 +47,29 @@ def create_and_send_wallet():
         else:
             return jsonify({"error": "Failed to generate wallet credentials"}), 500
             
+@app.route('/get-wallet-balance', methods=['POST'])
+def get_balance():
+    try:
+        # Parse the JSON body to get the Infura project ID
+        data = request.get_json()
+        if not data or 'infura_project_id' not in data:
+            return jsonify({"error": "Missing 'infura_project_id' in request body"}), 400
+        if not data or 'sender_address' not in data:
+            return jsonify({"error": "Missing 'sender_address' in request body"}), 400
+
+        infura_project_id = data['infura_project_id']
+        sender_address = data['sender_address']
+            
+        web3 = Web3(Web3.HTTPProvider(f"https://sepolia.infura.io/v3/{infura_project_id}"))
+        
+        if not web3.is_connected():
+            print("Error: Unable to connect to the Ethereum network.")
+            return jsonify({"error": "Cannot connect to Ethereum network"}), 400
+
+        balance = web3.eth.get_balance(sender_address)
+        eth_balance = web3.from_wei(balance, 'ether')
+        return jsonify({"balance": eth_balance}), 200
+            
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
