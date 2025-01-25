@@ -47,6 +47,9 @@ def create_and_send_wallet():
         else:
             return jsonify({"error": "Failed to generate wallet credentials"}), 500
             
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+            
 @app.route('/get-wallet-balance', methods=['POST'])
 def get_balance():
     try:
