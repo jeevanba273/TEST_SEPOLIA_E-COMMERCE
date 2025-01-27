@@ -99,13 +99,13 @@ def send_transaction():
             return jsonify({'error': 'Failed to connect to Infura'}), 500
 
         # Transaction details
-        value_to_send = web3.to_wei(eth_amount, 'ether')
+        value_to_send = float(web3.to_wei(eth_amount, 'ether'))
         gas_limit = 21000  # Standard gas limit for ETH transfer
-        gas_price = web3.to_wei('50', 'gwei')
+        gas_price = float(web3.to_wei('50', 'gwei'))
         chain_id = 11155111  # Sepolia chain ID
 
         # Get sender's balance
-        balance = web3.eth.get_balance(sender_address)
+        balance = float(web3.eth.get_balance(sender_address))
         total_tx_cost = value_to_send + (gas_limit * gas_price)
 
         # Check if the balance is sufficient
@@ -113,7 +113,7 @@ def send_transaction():
             return jsonify({
                 'error': 'Insufficient funds',
                 'balance': web3.from_wei(balance, 'ether'),
-                'required_balance': web3.from_wei(total_tx_cost, 'ether')
+                'required_balance': float(web3.from_wei(total_tx_cost, 'ether'))
             }), 400
 
         nonce = web3.eth.get_transaction_count(sender_address)
@@ -142,7 +142,7 @@ def send_transaction():
                 'status': 'success',
                 'transaction_hash': web3.to_hex(tx_hash),
                 'block_number': tx_receipt.blockNumber,
-                'updated_balance': web3.from_wei(updated_balance, 'ether')
+                'updated_balance': float(web3.from_wei(updated_balance, 'ether'))
             })
 
         else:
