@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from web3 import Web3
+from eth_account import Account
 
 app = Flask(__name__)
 
@@ -76,12 +77,6 @@ def get_balance():
             
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-from flask import Flask, request, jsonify
-from web3 import Web3
-from eth_account import Account
-
-app = Flask(__name__)
 
 # Helper functions to validate address and private key
 def is_valid_address(address):
