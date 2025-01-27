@@ -71,7 +71,8 @@ def get_balance():
 
         balance = web3.eth.get_balance(sender_address)
         eth_balance = web3.from_wei(balance, 'ether')
-        return jsonify({"balance": eth_balance}), 200
+        eth_balance_float = float(eth_balance)
+        return jsonify({"balance": eth_balance_float}), 200
             
     except Exception as e:
         return jsonify({"error": str(e)}), 500
