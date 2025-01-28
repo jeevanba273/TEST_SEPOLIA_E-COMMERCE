@@ -184,8 +184,8 @@ def send_transaction():
         if balance < total_tx_cost:
             return jsonify({
                 'error': 'Insufficient funds',
-                'balance': web3.from_wei(balance, 'ether'),
-                'required_balance': web3.from_wei(total_tx_cost, 'ether')
+                'balance': float(web3.from_wei(balance, 'ether')),
+                'required_balance': float(web3.from_wei(total_tx_cost, 'ether'))
             }), 400
 
         nonce = web3.eth.get_transaction_count(sender_address)
